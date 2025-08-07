@@ -27,7 +27,8 @@ Je kunt het programma op twee manieren gebruiken:
 4. Volg de instructies in het venster
 5. Je transcript wordt automatisch opgeslagen naast je audiobestand
 
-💡 *Geen installatie nodig. Geen internetverbinding vereist.*
+💡 *Geen installatie nodig. Geen internetverbinding vereist\*.*  
+ \*Let op: bij het eerste gebruik wordt het Whisper-taalmodel gedownload. Hiervoor is eenmalig een internetverbinding nodig.
 
 ---
 
