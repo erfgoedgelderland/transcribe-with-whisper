@@ -13,8 +13,11 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Whisper models (optioneel)
+# Whisper models
 models/
 
 # Binaries en hulpprogramma's
 bin/
+
+# releases
+releases/

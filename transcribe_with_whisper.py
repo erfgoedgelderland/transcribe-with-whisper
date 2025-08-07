@@ -1,3 +1,14 @@
+import os
+import sys
+import time
+import warnings
+from tkinter import Tk, filedialog, messagebox
+
+MODEL_SIZE = "base"  # Kies uit: tiny, base, small, medium, large
+
+# ==============================================
+# Intro
+# ==============================================
 print("==============================================", flush=True)
 print(" TRANSCRIBE WITH WHISPER – Erfgoed Gelderland", flush=True)
 print("==============================================", flush=True)
@@ -10,51 +21,61 @@ print(flush=True)
 print("LET OP: transcriberen kan even duren.", flush=True)
 print("Reken op ongeveer 1 minuut verwerkingstijd per minuut audio.", flush=True)
 print(flush=True)
-print("Versie: 2025v1", flush=True)
-print(flush=True)
+print("Versie: 2025v1.1", flush=True)
 print(flush=True)
 input("> Druk op Enter om verder te gaan...")
-print(flush=True)
 print("Stap 1/3: Opstarten... even geduld.", flush=True)
 
-import os
-import warnings
-import sys
-import time
-from tkinter import Tk, filedialog, messagebox
+
+# ==============================================
+# Setup paden voor modellen en ffmpeg
+# ==============================================
 
 # Detecteer of we in een gebundelde .exe draaien (PyInstaller)
 if getattr(sys, 'frozen', False):
-    base_path = sys._MEIPASS  # Tijdelijke map van PyInstaller
-    assets_path = os.path.join(base_path, 'whisper', 'assets')
+    app_dir = os.path.dirname(sys.executable)
 else:
-    assets_path = os.path.join(os.path.dirname(__file__), 'env', 'Lib', 'site-packages', 'whisper', 'assets')
+    app_dir = os.path.dirname(__file__)
 
-# Forceer dat Whisper zijn assets uit de goede map laadt
-os.environ["WHISPER_ASSETS"] = assets_path
+model_dir = os.path.join(app_dir, "models")
+ffmpeg_dir = os.path.join(app_dir, "bin")
+os.environ["PATH"] = ffmpeg_dir + os.pathsep + os.environ["PATH"]
+
+
+# ==============================================
+# Transcriptie-functie
+# ==============================================
 
 def transcribe_audio(audio_path):
     import whisper
-    print("Stap 2/3: Taalmodel wordt geladen.")
-    # ffmpeg toevoegen aan PATH
-    ffmpeg_path = os.path.join(os.path.dirname(__file__), "bin")
-    os.environ["PATH"] = ffmpeg_path + os.pathsep + os.environ["PATH"]
 
-    model_dir = os.path.join(os.path.dirname(__file__), "models")
-    model = whisper.load_model("base", download_root=model_dir)
+    model_path = os.path.join(model_dir, MODEL_SIZE + ".pt")
+    print("Stap 2/3: Taalmodel wordt geladen...", flush=True)
+
+    if not os.path.exists(model_path):
+        print("          Bij het eerste gebruik wordt het Whisper-taalmodel gedownload.", flush=True)
+        print("          Hier is eenmalig een internetverbinding voor nodig.", flush=True)
     
-    print("Stap 3/3: Transcript wordt gemaakt. Dit kan even duren...")
-    print("          Sluit dit venster niet voordat het transcript klaar is.")
+    model = whisper.load_model(MODEL_SIZE, download_root=model_dir)
+
+    print("Stap 3/3: Transcript wordt gemaakt. Dit kan even duren...", flush=True)
+    print("          Sluit dit venster niet voordat het transcript klaar is.", flush=True)
     start = time.time()
     result = model.transcribe(audio_path)
     end = time.time()
-    duur = end - start
+
     return result["text"], round(end - start, 2)
 
+
+# ==============================================
+# Hoofdprogramma
+# ==============================================
+
 def main():
-    # Onderdruk FP16 waarschuwingen van Whisper
+    # Onderdruk FP16-waarschuwingen
     warnings.filterwarnings("ignore", message="FP16 is not supported.*")
 
+    # Open bestandsdialoog
     root = Tk()
     root.withdraw()
     messagebox.showinfo("Whisper Transcriber", "Selecteer een audiobestand om te transcriberen.")
@@ -79,6 +100,7 @@ def main():
         print(str(e))
     finally:
         input("\nDruk op Enter om dit venster te sluiten...")
+
 
 if __name__ == "__main__":
     main()
