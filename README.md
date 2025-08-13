@@ -25,24 +25,7 @@ Geen installatie of internetverbinding nodig.
 **Bij eerste gebruik wordt het gekozen model automatisch gedownload** naar `models/`.  
 Dit gebeurt éénmalig per model.
 
-<<<<<<< HEAD
-1. Download de nieuwste versie via de [releases-pagina](https://github.com/erfgoedgelderland/transcribe-with-whisper/releases)
-2. Pak het `.zip` bestand uit
-3. Dubbelklik op `transcribe_with_whisper.exe`
-4. Volg de instructies in het venster
-5. Je transcript wordt automatisch opgeslagen naast je audiobestand
-
-💡 *Geen installatie nodig. Geen internetverbinding vereist\*.*  
- \*Let op: bij het eerste gebruik wordt het Whisper-taalmodel gedownload. Hiervoor is eenmalig een internetverbinding nodig.
-
----
-
-### 2. Gebruik de Python-versie (voor ontwikkelaars)
-
-#### 📦 Installatie
-=======
 ### Python-versie (voor ontwikkelaars)
->>>>>>> 775f583 (Release v1.1.0: Faster-Whisper, GUI, .env)
 
 ```bash
 git clone https://github.com/erfgoedgelderland/transcribe-with-whisper.git
