@@ -1,0 +1,42 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+env/
+venv/
+
+# Build outputs
+build/
+dist/
+*.spec
+releases/
+*.exe
+
+# Models
+models/
+
+# Outputs
+outputs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/project settings
+.vscode/
+.idea/
+
+# Local environment files
+.env
+
+#PAGE files
+PAGE/
+
+#ffmpeg
+bin/
+
+#archive
+archive/
+
+
