@@ -1,23 +1,42 @@
-# Virtuele omgeving
-env/
-venv/
-
-# PyInstaller build output
-build/
-dist/
-*.spec
-*.exe
-
 # Python cache
 __pycache__/
 *.pyc
-*.pyo
 
-# Whisper models
+# Virtual environment
+env/
+venv/
+
+# Build outputs
+build/
+dist/
+*.spec
+releases/
+*.exe
+
+# Models
 models/
 
-# Binaries en hulpprogramma's
+# Outputs
+outputs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE/project settings
+.vscode/
+.idea/
+
+# Local environment files
+.env
+
+#PAGE files
+PAGE/
+
+#ffmpeg
 bin/
 
-# releases
-releases/
+#archive
+archive/
+
+

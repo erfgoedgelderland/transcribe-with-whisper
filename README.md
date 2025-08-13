@@ -1,88 +1,80 @@
 # Transcribe with Whisper
 
-Een eenvoudig transcriptieprogramma op basis van [OpenAI Whisper](https://github.com/openai/whisper).  
-Veilig, open source en Nederlandstalig.
+**Transcribe with Whisper** is een Nederlandstalig, open source transcriptieprogramma gebaseerd op [Faster-Whisper](https://github.com/SYSTRAN/faster-whisper), een snelle en efficiënte implementatie van [OpenAI Whisper](https://github.com/openai/whisper).  
+Het programma werkt volledig lokaal: er wordt **geen audio of tekst naar internet verstuurd**.
 
----
+## Functies
 
-## 🧠 Wat doet dit programma?
-
-- Zet audiobestanden automatisch om naar tekst
-- Werkt volledig lokaal op je eigen computer
-- Verstuurd **geen** gegevens via internet
+- Zet audiobestanden om naar tekst met hoge nauwkeurigheid
+- Snellere verwerking dankzij Faster-Whisper
 - Ondersteunt o.a. `.wav`, `.mp3`, `.m4a`, `.ogg`
+- Volledig offline en privacyvriendelijk
 - Geschikt voor interviews, erfgoedprojecten, podcasts en meer
+- Modellen worden lokaal opgeslagen in de map `models/`
 
----
+## Gebruik
 
-## 🚀 Hoe gebruik je het?
+### Windows (.exe-versie)
 
-Je kunt het programma op twee manieren gebruiken:
+1. Download de nieuwste release via [GitHub Releases](https://github.com/erfgoedgelderland/transcribe-with-whisper/releases)  
+2. Pak het `.zip`-bestand uit  
+3. Start `transcribe_with_whisper.exe`  
+4. Volg de instructies in het venster  
 
-### 1. Gebruik de `.exe` (aanbevolen voor Windows-gebruikers)
+Geen installatie of internetverbinding nodig.  
+**Bij eerste gebruik wordt het gekozen model automatisch gedownload** naar `models/`.  
+Dit gebeurt éénmalig per model.
 
-1. Download de nieuwste versie via de [releases-pagina](https://github.com/erfgoedgelderland/transcribe-with-whisper/releases)
-2. Pak het `.zip` bestand uit
-3. Dubbelklik op `transcribe_with_whisper.exe`
-4. Volg de instructies in het venster
-5. Je transcript wordt automatisch opgeslagen naast je audiobestand
-
-💡 *Geen installatie nodig. Geen internetverbinding vereist.*
-
----
-
-### 2. Gebruik de Python-versie (voor ontwikkelaars)
-
-#### 📦 Installatie
+### Python-versie (voor ontwikkelaars)
 
 ```bash
 git clone https://github.com/erfgoedgelderland/transcribe-with-whisper.git
 cd transcribe-with-whisper
 python -m venv env
-env\Scripts\activate  # Of source env/bin/activate op Mac/Linux
+env\Scripts\activate  # Op Mac/Linux: source env/bin/activate
 pip install -r requirements.txt
+python main_app.py
 ```
 
-#### ▶️ Uitvoeren
+## Output
 
-```bash
-python transcribe_with_whisper.py
-```
+Transcripties worden opgeslagen als `.txt`-bestand.  
+De opslaglocatie wordt bepaald door de instelling `TRANSCRIBER_OUTPUT_STRATEGY` in `.env`:
 
----
+- `next_to_audio` → naast het originele audiobestand (standaard)  
+- `outputs_dir` → in de vaste map `outputs/` binnen de project- of exe-map  
 
-## 📁 Output
-
-De transcriptie wordt opgeslagen als een `.txt` bestand met dezelfde naam als je audiobestand, bijvoorbeeld:
+Bestandsnaamvoorbeeld:
 
 ```
-interview.mp3  →  interview_transcript.txt
+interview.mp3 → interview_transcript_small_20250813.txt
 ```
 
----
+## Modellen
 
-## ℹ️ Vereisten
+- Ondersteunde modellen: `tiny`, `base`, `small`, `medium`, `large-v3`
+- Modelgrootte varieert van ca. 75 MB tot 3 GB
+- Modellen worden gedownload van [Hugging Face](https://huggingface.co/Systran) en lokaal opgeslagen in `models/`
 
-- Windows 10/11
-- Voor de Python-versie: Python 3.9 of hoger
+## FFmpeg
 
----
+Voor audioverwerking maakt Transcribe with Whisper gebruik van [FFmpeg](https://ffmpeg.org/).
 
-## 🛡️ Veiligheid
+- **Windows (.exe)**: FFmpeg wordt meegeleverd in de map `bin/`, geen installatie nodig.  
+- **Python-versie**: Installeer FFmpeg handmatig via je pakketbeheerder of [ffmpeg.org/download.html](https://ffmpeg.org/download.html).
 
-- Dit programma draait volledig **offline**
-- Geen audio of transcriptie wordt online verstuurd
-- Gemaakt met privacy in gedachten
+## Systeemvereisten
 
----
+- Windows 10/11  
+- Voor de Python-versie: Python 3.9 of hoger  
+- Genoeg vrije schijfruimte voor het gekozen model
 
-## 📄 Licentie
+## Licentie
 
-Deze software is open source onder de [MIT-licentie](LICENSE).
+Deze software is beschikbaar onder de [MIT-licentie](LICENSE).  
+Zie ook de meegeleverde licentiebestanden `LICENSE_ffmpeg` en `LICENSE_whisper` voor componenten van derden.
 
----
+## Bijdragen
 
-## 👥 Ontwikkeling en bijdragen
-
-Dit project is ontwikkeld door Erfgoed Gelderland.  
-Je mag deze code gebruiken, aanpassen en doorontwikkelen. Pull requests zijn welkom!
+Ontwikkeld door **Erfgoed Gelderland**.  
+Je mag de code vrij gebruiken, aanpassen en uitbreiden. Pull requests zijn welkom.
