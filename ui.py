@@ -8,8 +8,10 @@ from tkinter import filedialog, messagebox
 __all__ = [
     "init_gui", "kies_bestand",
     "append_log", "toon_progress", "verberg_progress", "update_progress",
+    "toon_progress_download", "verberg_progress_download", "update_progress_download",
     "button_start", "button_cancel", "button_open_folder"
 ]
+
 
 
 TOEGESTAAN_MODELLEN = ["tiny", "base", "small", "medium", "large-v3"]
@@ -46,10 +48,11 @@ def append_log(message):
         pass
 
 def _ui_show_progress():
-    gui.progress["value"] = 0
+    _ui_update_progress(0)
     gui.progress.place(relx=gui.progress_x, rely=gui.progress_y,
                        relwidth=gui.progress_width, height=gui.progress_height)
     gui.progress.update_idletasks()
+    gui.LabelProgressTX.place(relx=0.022, rely=gui.progress_y - 0.035, height=18, relwidth=0.94)
 
 def toon_progress():
     try:
@@ -59,6 +62,7 @@ def toon_progress():
 
 def _ui_hide_progress():
     gui.progress.place_forget()
+    gui.LabelProgressTX.place_forget()
 
 def verberg_progress():
     try:
@@ -118,11 +122,16 @@ def _run_transcription(bestand, model):
     try:
         append_log(f"Bestand: {bestand}")
         append_log(f"Model: {model}")
+        
         output = engine.transcribe(
             audio_file=bestand,
             model_name=model,
             log=append_log,
-            update_progress=update_progress,
+            progress_transcript=update_progress,
+            progress_download=update_progress_download,
+            on_download_start=toon_progress_download,
+            on_download_done=verberg_progress_download,
+            on_transcribe_start=toon_progress,
             cancel_event=_cancel_event,
             timer_start=start_timer,
             timer_stop=stop_timer
@@ -162,7 +171,7 @@ def button_start():
     gui.output_path = None
 
     gui.toon_text1()
-    toon_progress()
+
     try:
         _hide_start_button()
         _hide_postrun_buttons()
@@ -211,7 +220,7 @@ def start_timer(phase=None):
     global _timer_start, _timer_running
     _timer_start = time.time()
     _timer_running = True
-    gui.LabelTimer.place(relx=0.022, rely=0.81, relwidth=0.94, height=20)
+    gui.LabelTimer.place(relx=0.022, rely=0.85, relwidth=0.94, height=20)
     _update_timer_label()
 
 def stop_timer(phase=None):
@@ -222,9 +231,11 @@ def stop_timer(phase=None):
     # bereken totale duur
     if _timer_start:
         elapsed = int(time.time() - _timer_start)
-        mins, secs = divmod(elapsed, 60)
-        tijd_str = f"{mins} min {secs} sec"
-        append_log(f"{phase.capitalize() if phase else 'Taak'} voltooid in {tijd_str}")
+        if elapsed > 0:
+            mins, secs = divmod(elapsed, 60)
+            hours, mins = divmod(mins, 60)
+            tijd_str = f"{hours:02d}:{mins:02d}:{secs:02d}"
+            append_log(f"\n{phase.capitalize() if phase else 'Taak'} voltooid in {tijd_str}")
 
 def _update_timer_label():
     if not _timer_running:
@@ -233,3 +244,40 @@ def _update_timer_label():
     mins, secs = divmod(elapsed, 60)
     gui.LabelTimer.config(text=f"{mins:02d}:{secs:02d}")
     gui.top.after(1000, _update_timer_label)
+
+# ---------- Tweede balk: download ----------
+
+def _ui_show_progress_download():
+    gui.progress_download["value"] = 0
+    gui.progress_download.place(
+        relx=gui.progress_x, rely=gui.progress_y_download,
+        relwidth=gui.progress_width, height=gui.progress_height
+    )
+    gui.progress_download.update_idletasks()
+    gui.LabelProgressDL.place(relx=0.022, rely=gui.progress_y_download - 0.035, height=18, relwidth=0.94)
+
+def toon_progress_download():
+    try:
+        gui.top.after(0, _ui_show_progress_download)
+    except Exception:
+        pass
+
+def _ui_hide_progress_download():
+    gui.progress_download.place_forget()
+    gui.LabelProgressDL.place_forget()
+
+def verberg_progress_download():
+    try:
+        gui.top.after(0, _ui_hide_progress_download)
+    except Exception:
+        pass
+
+def _ui_update_progress_download(percentage):
+    gui.progress_download["value"] = int(max(0, min(100, percentage)))
+    gui.progress_download.update_idletasks()
+
+def update_progress_download(percentage):
+    try:
+        gui.top.after(0, _ui_update_progress_download, percentage)
+    except Exception:
+        pass

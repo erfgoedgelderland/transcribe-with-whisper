@@ -7,9 +7,12 @@ from datetime import datetime
 from env_loader import load_env
 load_env()
 
+import os
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
+
 # ============ App metadata ============
 APP_NAME = "Transcribe with Whisper"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.1.1"
 
 # ============ Basislocatie ============
 # Map van de exe of script

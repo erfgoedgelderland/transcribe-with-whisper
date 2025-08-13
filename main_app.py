@@ -1,3 +1,9 @@
+import sys, io
+if sys.stdout is None:
+    sys.stdout = io.StringIO()
+if sys.stderr is None:
+    sys.stderr = io.StringIO()
+
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter.constants import *
@@ -68,6 +74,29 @@ class Instellingen:
         self.progress["maximum"] = 100
         self.progress.place_forget()  # Verberg bij opstart
 
+         # Labels voor balken
+        self.LabelProgressDL = tk.Label(self.top, text="Model downloaden", background=_bgcolor, anchor='w')
+        self.LabelProgressTX = tk.Label(self.top, text="Transcriberen", background=_bgcolor, anchor='w')
+        self.LabelProgressDL.place_forget()
+        self.LabelProgressTX.place_forget()
+
+        # Posities (download boven transcriptie)
+        self.progress_y_download = 0.72  # download iets hoger
+        self.progress_y = 0.81          # transcriptie onder download
+
+
+        # Bestaande transcriptie-balk label tonen wanneer nodig
+        self.LabelProgressTX.place(relx=0.022, rely=self.progress_y - 0.045, height=18, relwidth=0.94)
+        self.LabelProgressTX.place_forget()
+
+        # Tweede balk (download)
+        self.progress_download = ttk.Progressbar(self.top, orient="horizontal", mode="determinate")
+        self.progress_download.place(relx=self.progress_x, rely=self.progress_y_download,
+                                     relwidth=self.progress_width, height=self.progress_height)
+        self.progress_download["value"] = 0
+        self.progress_download["maximum"] = 100
+        self.progress_download.place_forget()
+
         # Knoppenrij (onderaan):
         # Start (initieel), tijdens run: Annuleer op dezelfde plek,
         # na afloop: Open map op die plek en daarnaast Afsluiten.
@@ -95,7 +124,7 @@ class Instellingen:
 
         # Timer label bovenop de progressbar
         self.LabelTimer = tk.Label(self.top, text="", background=_bgcolor, anchor="center")
-        self.LabelTimer.place(relx=0.022, rely=0.81, relwidth=0.94, height=20)
+        self.LabelTimer.place(relx=0.022, rely=0.85, relwidth=0.94, height=20)
         self.LabelTimer.place_forget()
 
     def toon_text1(self):
