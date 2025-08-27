@@ -39,4 +39,7 @@ bin/
 #archive
 archive/
 
-
+*.code-workspace
+*.ps1
+ico/
+*.txt

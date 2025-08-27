@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from datetime import datetime
+from typing import Optional
 
 from env_loader import load_env
 load_env()
@@ -12,7 +13,7 @@ os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
 
 # ============ App metadata ============
 APP_NAME = "Transcribe with Whisper"
-APP_VERSION = "1.1.1"
+APP_VERSION = "1.1.2"
 
 # ============ Basislocatie ============
 # Map van de exe of script
@@ -24,6 +25,7 @@ else:
 # ============ Models ============
 MODEL_DIR = BASE_DIR / "models"
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
+ALLOWED_MODELS = ["tiny", "base", "small", "medium", "large-v3"]
 
 # ============ Compute type ============
 DEFAULT_COMPUTE_TYPE = os.getenv("FASTER_WHISPER_COMPUTE", "int8_float32")
@@ -36,18 +38,6 @@ OUTPUT_STRATEGY = os.getenv("TRANSCRIBER_OUTPUT_STRATEGY", "next_to_audio").stri
 OUTPUT_DIR = Path(os.getenv("TRANSCRIBER_OUTPUT_DIR", BASE_DIR / "outputs"))
 if OUTPUT_STRATEGY == "outputs_dir":
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-
-# ====== Output pad bouwen ======
-def build_output_path(input_audio: str, model_name: str, partial: bool = False) -> Path:
-    stem = Path(input_audio).stem
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M")
-    suffix = "partial" if partial else "transcript"
-    fname = f"{stem}_{suffix}_{model_name}_{timestamp}.txt"
-
-    if OUTPUT_STRATEGY == "outputs_dir":
-        return OUTPUT_DIR / fname
-    else:
-        return Path(input_audio).with_name(fname)
 
 # ============ FFmpeg zoeken ============
 def resolve_ffmpeg_path() -> Path | None:
