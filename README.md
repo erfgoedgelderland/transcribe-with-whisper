@@ -1,6 +1,7 @@
 # Transcribe with Whisper
 
 **Transcribe with Whisper** is een Nederlandstalig, open source transcriptieprogramma gebaseerd op [Faster-Whisper](https://github.com/SYSTRAN/faster-whisper), een snelle en efficiënte implementatie van [OpenAI Whisper](https://github.com/openai/whisper).  
+
 Het programma werkt volledig lokaal: er wordt **geen audio of tekst naar internet verstuurd**.
 
 ## Functies
@@ -8,7 +9,7 @@ Het programma werkt volledig lokaal: er wordt **geen audio of tekst naar interne
 - Zet audiobestanden om naar tekst met hoge nauwkeurigheid
 - Snellere verwerking dankzij Faster-Whisper
 - Ondersteunt o.a. `.wav`, `.mp3`, `.m4a`, `.ogg`
-- Volledig offline en privacyvriendelijk
+- Volledige offline transcripties en privacyvriendelijk
 - Geschikt voor interviews, erfgoedprojecten, podcasts en meer
 - Modellen worden lokaal opgeslagen in de map `models/`
 
@@ -21,9 +22,7 @@ Het programma werkt volledig lokaal: er wordt **geen audio of tekst naar interne
 3. Start `transcribe_with_whisper.exe`  
 4. Volg de instructies in het venster  
 
-Geen installatie of internetverbinding nodig.  
-**Bij eerste gebruik wordt het gekozen model automatisch gedownload** naar `models/`.  
-Dit gebeurt éénmalig per model.
+Bij eerste gebruik wordt het gekozen model automatisch gedownload naar `models/`. Hiervoor is eenmalig internetverbinding voor nodig. 
 
 ### Python-versie (voor ontwikkelaars)
 
@@ -33,7 +32,7 @@ cd transcribe-with-whisper
 python -m venv env
 env\Scripts\activate  # Op Mac/Linux: source env/bin/activate
 pip install -r requirements.txt
-python main_app.py
+python app.py
 ```
 
 ## Output
@@ -47,14 +46,24 @@ De opslaglocatie wordt bepaald door de instelling `TRANSCRIBER_OUTPUT_STRATEGY` 
 Bestandsnaamvoorbeeld:
 
 ```
-interview.mp3 → interview_transcript_small_20250813.txt
+interview.mp3 → interview_transcript[model][output][datum].txt
 ```
+- `[mode]` = gekozen model `tiny`, `base`, `small`, `medium`, `large-v3`
+- `[output]` = gekozen output `text`, `segments`, `sentences`
+- `[datum]` = datum van transcript `yyyymmdd-hhmm`
 
 ## Modellen
 
 - Ondersteunde modellen: `tiny`, `base`, `small`, `medium`, `large-v3`
 - Modelgrootte varieert van ca. 75 MB tot 3 GB
 - Modellen worden gedownload van [Hugging Face](https://huggingface.co/Systran) en lokaal opgeslagen in `models/`
+
+## Output
+
+Het transcript kan in drie formats opgeslagen worden.
+- **Doorlopende tekst** (`text`): Transcriptie zonder tijdstempels.
+- **Segmenten met tijdscode** (`segments`): Transcriptie per segment met tijdstempels.
+- **Zinnen met tijdscode** (`sentences`): Transcriptie per zin met tijdstempels.
 
 ## FFmpeg
 
